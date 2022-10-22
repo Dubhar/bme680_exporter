@@ -1,8 +1,6 @@
 import bme680
 import os
-import sys
 import time
-from datetime import datetime
 from flask import Flask, Response
 from prometheus_client import Counter, Gauge, start_http_server, generate_latest
 
