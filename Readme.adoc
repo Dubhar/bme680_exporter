@@ -40,3 +40,21 @@ At the moment you can (and probably should) adjust the following things:
 | devices['/dev/i2c-1'] | Mapping of the I²C bus on the host (may be different than "-1") to the I²C bus used inside the container (must be "i2c-1")
 | ports['9101'] | Port that the exporter is listening to, adjust so that each exporter has its unique port
 |===
+
+== Grafana
+
+Here are some queries as starting point. Adjust them and make yourself a dashboard that suits you!
+
+```
+# simplest queries
+current_temperature{}
+
+# queries with location filters
+current_humidity{location="LivingRoom"}
+current_air_pressure{location="Basement"}
+current_gas_resistance{location="Basement"}
+
+# queries with calculations (adjust pressure for temperature and measurement altitude of 186m)
+(current_air_pressure{location="Basement"} * (1.0 - ((0.0065*186.0) / (current_temperature{location="Basement"} + (0.0065 * 186.0) + 273.15)))^-5.257 )
+```
+
