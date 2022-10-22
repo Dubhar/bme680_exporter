@@ -1,0 +1,42 @@
+= BME680-Exporter
+
+== How to wire the sensor
+Here is a wiring diagram of an Adafruit BME680 breakout board and a Raspberry Pi Zero. Of course there are many other breakout board manufacturers and you should pay attention to their respective pinouts, see datasheets and or silkscreend text. Also you can use more than just a Raspberry Pi, basically every computer with I²C bus that is capable of running docker is sufficient. So the diagram is for examplary purposes only
+
+image::wiring.png[Wiring Example, 340, 350]
+
+== How to setup the Docker container
+For testing purposes it is suggested to run the container interactively, like so:
+```
+docker run -it -p 9101:9101 -e LOCATION="Bedroom" -e I2C_ADDRESS="0x78" --device /dev/i2c-1:/dev/i2c-1 dubhar/bme680_exporter:latest
+```
+For production it is recommended to use an orchestration tool like Kubernetes or docker-compose. Here is an example configuration for docker-compose:
+```
+version: "3.7"
+
+services:
+  bme680_exporter:
+    image: dubhar/bme680_exporter:latest
+    ports:
+      - "9101:9101"
+    devices:
+      - "/dev/i2c-1:/dev/i2c-1"
+    environment:
+      LOCATION: "LivingRoom"
+      I2C_ADDRESS: "0x78"
+    restart: always
+```
+
+== Settings
+
+At the moment you can (and probably should) adjust the following things:
+
+[cols="1,1"]
+|===
+|Setting | Description
+
+| ENV['LOCATION'] | A label that describes the sensor location, solely for display purposes. Default="home"
+| ENV['I2C_ADDRESS'] | The I²C address of the BME680 sensor. Default=0x77
+| devices['/dev/i2c-1'] | Mapping of the I²C bus on the host (may be different than "-1") to the I²C bus used inside the container (must be "i2c-1")
+| ports['9101'] | Port that the exporter is listening to, adjust so that each exporter has its unique port
+|===
