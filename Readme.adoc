@@ -17,13 +17,15 @@ version: "3.7"
 services:
   bme680_exporter:
     image: dubhar/bme680_exporter:latest
-    ports:
-      - "9101:9101"
+    expose:
+      - 9100
     devices:
       - "/dev/i2c-1:/dev/i2c-1"
     environment:
       LOCATION: "LivingRoom"
       I2C_ADDRESS: "0x78"
+      USERNAME: dubhar
+      PASSWORD: MyPr€cious
     restart: always
 ```
 
@@ -37,9 +39,24 @@ At the moment you can (and probably should) adjust the following things:
 
 | ENV['LOCATION'] | A label that describes the sensor location, solely for display purposes. Default="home"
 | ENV['I2C_ADDRESS'] | The I²C address of the BME680 sensor. Default=0x77
+| ENV['USERNAME'] | Username for basic auth, required when accessing /metrics. Default="admin"
+| ENV['PASSWORD'] | Password for basic auth, required when acessing /metrics. Default="password"
 | devices['/dev/i2c-1'] | Mapping of the I²C bus on the host (may be different than "-1") to the I²C bus used inside the container (must be "i2c-1")
 | ports['9101'] | Port that the exporter is listening to, adjust so that each exporter has its unique port
 |===
+
+== Prometheus
+
+Here is a snippet of a `prometheus.yml` configuration
+```
+[...]
+  - job_name: 'bme680'
+    static_configs:
+      - targets: ['bme680_exporter:9100']
+    basic_auth:
+      username: dubhar
+      password: MyPr€cious
+```
 
 == Grafana
 

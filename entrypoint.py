@@ -2,7 +2,9 @@ import bme680
 import os
 import time
 from flask import Flask, Response
+from flask_httpauth import HTTPBasicAuth
 from prometheus_client import Counter, Gauge, start_http_server, generate_latest
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # Configurable vars
 i2c_address = 0x77
@@ -13,6 +15,11 @@ if 'I2C_ADDRESS' in os.environ:
     i2c_address = os.environ['I2C_ADDRESS']
 if 'LOCATION' in os.environ:
     location = os.environ['LOCATION']
+if 'USERNAME' not in os.environ:
+    os.environ['USERNAME'] = "admin"
+if 'PASSWORD' not in os.environ:
+    os.environ['PASSWORD'] = "password"
+os.environ['PASSWORD'] = generate_password_hash(os.environ['PASSWORD'])
 
 # setup BME680 sensor (once)
 sensor = bme680.BME680(i2c_address)
@@ -38,6 +45,7 @@ def get_measurements():
 
 # configure webapp
 app = Flask(__name__)
+auth = HTTPBasicAuth()
 
 current_temperature = Gauge(
         'current_temperature',
@@ -63,7 +71,16 @@ current_gas_resistance = Gauge(
         ['location']
 )
 
+@auth.verify_password
+def authenticate(username, password):
+    if username and password:
+        if username == os.environ['USERNAME']:
+            if check_password_hash(os.environ['PASSWORD'], password):
+                return True
+    return False
+
 @app.route('/metrics')
+@auth.login_required
 def metrics():
     metrics = get_measurements()
     current_temperature.labels(location).set(metrics['temperature'])
@@ -78,5 +95,5 @@ def root():
 
 if __name__ == '__main__':
     from waitress import serve
-    serve(app, host='0.0.0.0', port=9101)
+    serve(app, host='0.0.0.0', port=9100)
 
