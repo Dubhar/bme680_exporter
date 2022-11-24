@@ -1,5 +1,11 @@
 = BME680-Exporter
 
+image:https://img.shields.io/docker/pulls/dubhar/bme680_exporter?logo=docker&style=flat[link="https://hub.docker.com/r/dubhar/bme680_exporter"]
+image:https://img.shields.io/docker/v/dubhar/bme680_exporter?sort=semver&style=flat[link="https://hub.docker.com/r/dubhar/bme680_exporter"]
+image:https://img.shields.io/docker/image-size/dubhar/bme680_exporter/latest?label=image%20size%20%28latest%20%22docker%22%29&logo=docker[asdf]
+image:https://img.shields.io/github/license/dubhar/bme680_exporter[link="https://github.com/dubhar/bme680_exporter/blob/develop/LICENSE"]
+
+
 == How to wire the sensor
 Here is a wiring diagram of an Adafruit BME680 breakout board and a Raspberry Pi Zero. Of course there are many other breakout board manufacturers and you should pay attention to their respective pinouts, see datasheets and or silkscreend text. Also you can use more than just a Raspberry Pi, basically every computer with I²C bus that is capable of running docker is sufficient. So the diagram is for examplary purposes only
 
