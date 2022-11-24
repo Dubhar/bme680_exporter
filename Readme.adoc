@@ -4,6 +4,7 @@ image:https://img.shields.io/docker/pulls/dubhar/bme680_exporter?logo=docker&sty
 image:https://img.shields.io/docker/v/dubhar/bme680_exporter?sort=semver&style=flat[link="https://hub.docker.com/r/dubhar/bme680_exporter"]
 image:https://img.shields.io/docker/image-size/dubhar/bme680_exporter/latest?label=image%20size%20%28latest%20%22docker%22%29&logo=docker[asdf]
 image:https://img.shields.io/github/license/dubhar/bme680_exporter[link="https://github.com/dubhar/bme680_exporter/blob/develop/LICENSE"]
+image:https://snyk.io/test/github/dubhar/bme680_exporter/badge.svg[Vulnerabilities]
 
 
 == How to wire the sensor
