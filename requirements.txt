@@ -1,6 +1,5 @@
 bme680
 flask
-flask-httpauth
 prometheus_client
 waitress >= 2.1.1
 
