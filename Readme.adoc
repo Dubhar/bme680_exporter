@@ -19,8 +19,6 @@ docker run -it -p 9100:9100 -e LOCATION="Bedroom" -e I2C_ADDRESS="0x76" --device
 ```
 For production it is recommended to use an orchestration tool like Kubernetes or docker-compose. Here is an example configuration for docker-compose:
 ```
-version: "3.7"
-
 services:
   bme680_exporter:
     image: dubhar/bme680_exporter:latest
