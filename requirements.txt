@@ -1,7 +1,7 @@
 bme680
 flask
 prometheus_client
-waitress >= 2.1.1
+waitress>=2.1.1
 
 werkzeug>=3.0.1 # not directly required, pinned by Snyk to avoid a vulnerability
 zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
