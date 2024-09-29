@@ -9,5 +9,5 @@ RUN python3 -m venv .venv && \
     pip3 install -r requirements.txt
 
 COPY entrypoint.py entrypoint.py
-ENTRYPOINT [".venv/bin/python3" , "entrypoint.py"]
-
+ENTRYPOINT [".venv/bin/python3"]
+CMD ["entrypoint.py"]
