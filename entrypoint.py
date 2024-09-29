@@ -1,8 +1,9 @@
-import bme680
 import os
 import time
+
+import bme680
 from flask import Flask, Response
-from prometheus_client import Counter, Gauge, start_http_server, generate_latest
+from prometheus_client import Gauge, generate_latest
 
 # Configurable vars
 i2c_address = 0x77
@@ -29,7 +30,6 @@ sensor.select_gas_heater_profile(0)
 
 # read sensor data (repeatedly)
 def get_measurements():
-    response = {}
     if not sensor.get_sensor_data() or not sensor.data.heat_stable:
         time.sleep(5)
 
@@ -65,11 +65,11 @@ current_gas_resistance = Gauge(
 
 @app.route('/metrics')
 def metrics():
-    metrics = get_measurements()
-    current_temperature.labels(location).set(metrics['temperature'])
-    current_humidity.labels(location).set(metrics['humidity'])
-    current_air_pressure.labels(location).set(metrics['pressure'])
-    current_gas_resistance.labels(location).set(metrics['gas_resistance'])
+    measurements = get_measurements()
+    current_temperature.labels(location).set(measurements['temperature'])
+    current_humidity.labels(location).set(measurements['humidity'])
+    current_air_pressure.labels(location).set(measurements['pressure'])
+    current_gas_resistance.labels(location).set(measurements['gas_resistance'])
     return Response(generate_latest(), mimetype=content_type)
 
 @app.route('/')
